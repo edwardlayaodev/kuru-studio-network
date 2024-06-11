@@ -2,9 +2,8 @@
 import StyledComponentsRegistry from "../../_utilities/antd_registry";
 import ConfigProvider from "antd/es/config-provider";
 import { StyleProvider } from "@ant-design/cssinjs";
-import { Provider as ReduxProvider } from "react-redux";
-import { store } from "@/app/_data/store";
 import { ReactNode } from "react";
+import { Provider as JotaiProvider } from "jotai";
 
 interface IWrapperProps {
   children: ReactNode;
@@ -15,7 +14,7 @@ const Wrapper: React.FunctionComponent<IWrapperProps> = ({ children }) => {
     <StyledComponentsRegistry>
       <ConfigProvider>
         <StyleProvider hashPriority="high">
-          <ReduxProvider store={store}>{children}</ReduxProvider>
+          <JotaiProvider>{children}</JotaiProvider>
         </StyleProvider>
       </ConfigProvider>
     </StyledComponentsRegistry>
