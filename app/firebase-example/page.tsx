@@ -1,65 +1,87 @@
 "use client";
-import { useState } from 'react';
-import { initializeApp } from 'firebase/app';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDknUDL6WwsAGFyiBru36J8hKWc6yD6B28",
-  authDomain: "kuru-studio-social-firebase-dv.firebaseapp.com",
-  databaseURL: "https://kuru-studio-social-firebase-dv.firebaseio.com",
-  projectId: "kuru-studio-social-firebase-dv",
-  storageBucket: "kuru-studio-social-firebase-dv.appspot.com",
-  messagingSenderId: "1021677199092",
-  appId: "1:1021677199092:web:db5bf81fe426816a5808a1",
-  measurementId: "G-KNH9M8BJCC"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+import { useState } from "react";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  User,
+} from "firebase/auth";
+import { auth } from "../_utilities/firebaseConfig";
+import { useAtom } from "jotai";
+import { userAtom } from "../_data/atoms";
+import Atom from "../_components/atoms";
 
 export default function FirebaseExamplePage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [user, setUser] = useAtom(userAtom);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
   const handleSignUp = async () => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       // User signed up successfully
-      console.log(userCredential.user);
-    } catch (error) {
+    } catch (error: any) {
       setError(error.message);
     }
   };
 
   const handleSignIn = async () => {
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential: any = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       // User signed in successfully
-      console.log(userCredential.user.accessToken);
-    } catch (error) {
+    } catch (error: any) {
+      setError(error.message);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      signOut(auth);
+    } catch (error: any) {
       setError(error.message);
     }
   };
 
   return (
     <div>
-      <h2>Firebase Authentication</h2>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={handleSignUp}>Sign Up</button>
-      <button onClick={handleSignIn}>Sign In</button>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <Atom.Visibility state={!user}>
+        <h2>Firebase Authentication</h2>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
+        <button onClick={handleSignUp}>Sign Up</button>
+        <button onClick={handleSignIn}>Sign In</button>
+      </Atom.Visibility>
+
+      <Atom.Visibility state={user != null}>
+        <h1>
+          You are Logged In as:{" "}
+          {user?.displayName ? user?.displayName : "No display name set"} with
+          the uid: {user?.uid}
+        </h1>
+        <button onClick={handleSignOut}>Sign Out</button>
+      </Atom.Visibility>
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 }
