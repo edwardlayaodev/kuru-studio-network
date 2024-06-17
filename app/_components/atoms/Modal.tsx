@@ -15,12 +15,12 @@ const Modal: React.FunctionComponent<IModalProps> = ({}) => {
 
   return (
     <AntModal
-      open={modal.open}
+      open={modal?.open}
       onCancel={handleCancel}
       // hide the default ok & cancel buttons
       footer={null}
     >
-      {modal.content}
+      {modal?.content}
     </AntModal>
   );
 };

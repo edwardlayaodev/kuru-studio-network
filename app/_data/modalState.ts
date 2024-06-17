@@ -5,7 +5,7 @@ import { atomWithReducer } from "jotai/utils";
 
 interface IModalState {
   open: boolean;
-  content: ReactNode;
+  content: ReactNode | null;
 }
 
 const modalState: IModalState = {
@@ -14,15 +14,15 @@ const modalState: IModalState = {
 };
 
 const modalReducer = (prev: any, action: any) => {
+  // content is the content of the modal, for ex, a login form
+  // this will be passed on reducer action.payload
   if (action.type == "open")
     return {
-      ...prev,
       open: true,
       content: action.payload,
     };
   if (action.type == "close")
     return {
-      ...prev,
       open: false,
       content: null,
     };
