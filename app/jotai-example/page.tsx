@@ -2,10 +2,18 @@
 import { useAtom } from "jotai";
 import { msgAtom } from "../_data/atoms";
 import { useState } from "react";
+import { modalReducerAtom } from "../_data/modalState";
+import Atom from "../_components/atoms";
 
 export default function JotaiExamplePage() {
   const [msg, setMsg] = useAtom(msgAtom);
   const [input, setInput] = useState("");
+  const [modal, dispatch] = useAtom(modalReducerAtom);
+
+  const open = () => {
+    // open a modal, payload will be the content of the modal
+    dispatch({ type: "open", payload: <h1>TEST: This is a Modal</h1> });
+  };
 
   return (
     <div>
@@ -25,6 +33,7 @@ export default function JotaiExamplePage() {
         />
         <button type="submit">submit</button>
       </form>
+      <Atom.Button onClick={open}>Test Open Modal</Atom.Button>
     </div>
   );
 }
