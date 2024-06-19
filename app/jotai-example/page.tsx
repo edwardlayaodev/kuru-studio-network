@@ -3,7 +3,7 @@ import { useAtom } from "jotai";
 import { msgAtom } from "../_data/atoms";
 import { useState } from "react";
 import { modalReducerAtom } from "../_data/modalState";
-import Atom from "../_components/atoms";
+import Atom from "@atom";
 
 export default function JotaiExamplePage() {
   const [msg, setMsg] = useAtom(msgAtom);

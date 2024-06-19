@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Organism from "@organism";
 import "../../_styles/globals.css";
-import Atom from "../atoms";
+import Atom from "@atom";
 
 const Default = ({ children }: { children: React.ReactNode }) => {
   return (
